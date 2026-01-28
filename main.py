@@ -9,13 +9,15 @@ while userinput != "exit":
     userdata = (requests.get(f"https://api.github.com/users/{userinput}/events")).json()
     totalPushesPerRepo = {}
     for activity in userdata:
+        fullrepolink = activity["repo"]["url"]
+        repo = fullrepolink.split("/")[-2:]
+        repo = "/".join(repo)
         if activity["type"] == "PushEvent":
-            fullrepolink = activity["repo"]["url"]
-            repo = fullrepolink.split("/")[-2:]
-            repo = "/".join(repo)
             try:
                 totalPushesPerRepo[repo] += 1
             except:
                 totalPushesPerRepo[repo] = 1
+        elif activity["type"] == "WatchEvent":
+            print("Starred " + repo)
     for repo in list(totalPushesPerRepo.keys()):
         print("Pushed " + str(totalPushesPerRepo[repo]) + " commits to " + repo)
