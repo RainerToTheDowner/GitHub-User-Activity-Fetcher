@@ -19,5 +19,11 @@ while userinput != "exit":
                 totalPushesPerRepo[repo] = 1
         elif activity["type"] == "WatchEvent":
             print("Starred " + repo)
+        elif activity["type"] == "IssuesEvent":
+            action = activity["payload"]["action"]
+            if action == "opened":
+                print("Opened a new issue in " + repo)
+            else:
+                print(action.capitalize() + " an issue in " + repo)
     for repo in list(totalPushesPerRepo.keys()):
         print("Pushed " + str(totalPushesPerRepo[repo]) + " commits to " + repo)
