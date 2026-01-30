@@ -9,9 +9,7 @@ while userinput != "exit":
     userdata = (requests.get(f"https://api.github.com/users/{userinput}/events")).json()
     totalPushesPerRepo = {}
     for activity in userdata:
-        fullrepolink = activity["repo"]["url"]
-        repo = fullrepolink.split("/")[-2:]
-        repo = "/".join(repo)
+        repo = activity["repo"]["name"]
         if activity["type"] == "PushEvent":
             try:
                 totalPushesPerRepo[repo] += 1
@@ -25,5 +23,8 @@ while userinput != "exit":
                 print("Opened a new issue in " + repo)
             else:
                 print(action.capitalize() + " an issue in " + repo)
+        elif activity["type"] == "IssueCommentEvent":
+            comment = activity["payload"]["comment"]["body"]
+            print("Commented '" + comment + "' on " + repo)
     for repo in list(totalPushesPerRepo.keys()):
         print("Pushed " + str(totalPushesPerRepo[repo]) + " commits to " + repo)
