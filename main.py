@@ -30,6 +30,9 @@ while userinput != "exit":
                 elif activity["type"] == "IssueCommentEvent":
                     comment = activity["payload"]["comment"]["body"]
                     print("Commented '" + comment + "' on " + repo)
+                elif activity["type"] == "ForkEvent":
+                    fork = activity["payload"]["forkee"]["full_name"]
+                    print("Forked " + repo + " to create " + fork)
             for repo in list(totalPushesPerRepo.keys()):
                 print("Pushed " + str(totalPushesPerRepo[repo]) + " commits to " + repo)
     else:
