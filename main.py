@@ -2,7 +2,7 @@ import requests
 
 userinput = ""
 while userinput != "exit":
-    userinput = input()
+    userinput = input("Enter a username (or exit): ")
     if userinput == "exit":
         break
 
@@ -15,10 +15,7 @@ while userinput != "exit":
             for activity in userdata:
                 repo = activity["repo"]["name"]
                 if activity["type"] == "PushEvent":
-                    try:
-                        totalPushesPerRepo[repo] += 1
-                    except:
-                        totalPushesPerRepo[repo] = 1
+                    totalPushesPerRepo[repo] = totalPushesPerRepo.get(repo, 0) + 1
                 elif activity["type"] == "WatchEvent":
                     print("Starred " + repo)
                 elif activity["type"] == "IssuesEvent":
@@ -33,7 +30,7 @@ while userinput != "exit":
                 elif activity["type"] == "ForkEvent":
                     fork = activity["payload"]["forkee"]["full_name"]
                     print("Forked " + repo + " to create " + fork)
-            for repo in list(totalPushesPerRepo.keys()):
+            for repo in totalPushesPerRepo:
                 print("Pushed " + str(totalPushesPerRepo[repo]) + " commits to " + repo)
     else:
         print("Invalid username")
